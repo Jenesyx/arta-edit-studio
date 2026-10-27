@@ -1,0 +1,26 @@
+# your media and personal settings never go to GitHub
+raw/*
+assets/broll/*
+assets/mascot/*
+assets/brand/*
+font/*
+work/*
+final/*
+!raw/.gitkeep
+!assets/broll/.gitkeep
+!assets/mascot/.gitkeep
+!assets/brand/.gitkeep
+!font/.gitkeep
+!work/.gitkeep
+!final/.gitkeep
+reel.config.json
+
+# tooling
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.hyperframes/
+renders/
+.DS_Store
+Thumbs.db

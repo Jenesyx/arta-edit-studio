@@ -1,0 +1,6 @@
+# Install PyTorch FIRST with the command for your machine from https://pytorch.org
+# (NVIDIA GPU: pick the CUDA build -- Whisper is ~10x faster). Then:
+#   pip install -r requirements.txt
+openai-whisper>=20250625
+opencv-python-headless>=4.9,<5   # OpenCV 5 dropped the Haar face detector face_track.py uses
+numpy>=1.26

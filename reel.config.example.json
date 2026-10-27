@@ -1,0 +1,53 @@
+{
+  "creator": {
+    "name": "Your Name",
+    "handle": "yourhandle"
+  },
+  "language": "fa",
+  "whisper_model": "large-v3",
+  "broll_dir": "assets/broll",
+  "brand": {
+    "name": "Your Brand",
+    "wordmark": "yourbrand",
+    "mascot_dir": "assets/mascot",
+    "logo": "assets/brand/logo.png"
+  },
+  "palette": {
+    "primary": "#7B3BFF",
+    "secondary": "#A96CFF",
+    "ink": "#1A0E4D",
+    "deep": "#4A1FB8",
+    "accent": "#FF9A00",
+    "accent2": "#FFB347",
+    "highlight": "#FFD23F",
+    "paper": "#FFF8F6",
+    "red": "#FF3B5C",
+    "green": "#16A34A",
+    "pink": "#FF4F8B",
+    "social": "#0095F6"
+  },
+  "split_palette": {
+    "cream": "#F7EEE7",
+    "ink": "#20242F",
+    "accent": "#E07B53",
+    "accent_deep": "#B7502A",
+    "line": "#E4D8CD"
+  },
+  "fonts": {
+    "fa": "font/Vazirmatn-Medium.ttf",
+    "en": "font/Poppins-SemiBold.ttf",
+    "display": "font/Poppins-Black.ttf"
+  },
+  "split": {
+    "panel_height": 864,
+    "safe": [64, 160, 64, 32]
+  },
+  "render": {
+    "workers": 3,
+    "node_heap_mb": 12288
+  },
+  "loudness": {
+    "lufs": -14.0,
+    "true_peak": -1.5
+  }
+}

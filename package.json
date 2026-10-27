@@ -1,0 +1,15 @@
+{
+  "name": "arta-edit-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Claude Code skills that edit talking-head videos into finished Instagram Reels (Farsi-first).",
+  "author": "Arta Bidkhori",
+  "license": "MIT",
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "lucide-static": "^1.33.0"
+  },
+  "devDependencies": {
+    "hyperframes": "0.8.185"
+  }
+}
