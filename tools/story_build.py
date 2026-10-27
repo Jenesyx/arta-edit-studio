@@ -25,6 +25,7 @@ No captions. No SFX. Audio is the take's own mix (tools/finish.py remuxes it).
 
 from __future__ import annotations
 
+import argparse
 import importlib
 import json
 import math
@@ -38,6 +39,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import config as C  # noqa: E402
+import studio  # noqa: E402
 from showcase_build import icon  # noqa: E402
 
 # Palette from reel.config.json. The short colour names are what scene code
@@ -269,15 +271,16 @@ video.full{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:
 
 JS_HELPERS = """
 const fa = n => String(n).replace(/[0-9]/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
+// EASE / DUR / arcIn / whip / mblur / settle / kf / camTo come from assets/motion.js
 function pop(sel, t, o) {
   tl.fromTo(sel, {scale: 0.4, autoAlpha: 0},
-    Object.assign({scale: 1, autoAlpha: 1, duration: 0.3, ease: "back.out(1.8)"}, o || {}), t);
+    Object.assign({scale: 1, autoAlpha: 1, duration: DUR.pop, ease: EASE.pop}, o || {}), t);
 }
 function inUp(sel, t, o) {
-  tl.fromTo(sel, {y: 50, autoAlpha: 0},
-    Object.assign({y: 0, autoAlpha: 1, duration: 0.34, ease: "power3.out"}, o || {}), t);
+  tl.fromTo(sel, {y: 60, autoAlpha: 0},
+    Object.assign({y: 0, autoAlpha: 1, duration: DUR.enter, ease: EASE.enter}, o || {}), t);
 }
-function out(sel, t, d) { tl.to(sel, {autoAlpha: 0, duration: d || 0.2, ease: "power2.in"}, t); }
+function out(sel, t, d) { tl.to(sel, {autoAlpha: 0, duration: d || DUR.exit, ease: EASE.exit}, t); }
 function draw(sel, t, d) {
   tl.fromTo(sel, {strokeDashoffset: 1}, {strokeDashoffset: 0, duration: d || 0.4, ease: "power1.inOut"}, t);
 }
@@ -312,13 +315,15 @@ def face_centre(name: str) -> tuple[int, int]:
             round(statistics.median(y + h / 2 for x, y, w, h in rows)))
 
 
-def build(name: str) -> Path:
+def build(name: str, guides: bool = False, no_moodboard: bool = False) -> Path:
+    studio.require_style(name, skip=no_moodboard)
     mod = take_module(name)
     wd = C.work_dir_for(name)
     pub = wd / "sc" / "public"
     a = pub / "assets"
     (a / "fonts").mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(C.gsap_js(), a / "gsap.min.js")
+    scripts = studio.runtime(a)
+    overlay = studio.guides_html(a) if guides else ""
     for f in FONTS.values():
         shutil.copyfile(f, a / "fonts" / f.name)
     take = C.find_raw(name)
@@ -361,12 +366,12 @@ def build(name: str) -> Path:
 <div id="over" class="layer">{"".join(L["over"])}</div>
 <div id="fx" class="layer">{"".join(L["fx"])}<div id="flash"></div></div>
 <audio id="take-audio" class="clip" src="assets/take.mp4" data-start="0" data-duration="{dur}"
-  data-track-index="8" data-volume="1"></audio>'''
+  data-track-index="8" data-volume="1"></audio>{overlay}'''
 
     html = f"""<!doctype html>
 <html lang="fa" data-resolution="portrait">
 <head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
-<script src="assets/gsap.min.js"></script>
+{scripts}
 <style>{css}</style></head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{dur}" data-width="1080" data-height="1920">
@@ -383,11 +388,15 @@ window.__timelines["main"] = tl;
 """
     out = pub / "index.html"
     out.write_text(html, encoding="utf-8")
-    print(f"[story] {out}  ({len(mod.SCENES)} scenes, {len(c.js)} timeline lines, pivot {fx},{fy})")
+    print(f"[story] {out}  ({len(mod.SCENES)} scenes, {len(c.js)} timeline lines, pivot {fx},{fy})"
+          + ("  + Instagram guides (preview only -- rebuild without --guides to render)" if guides else ""))
     return out
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit("usage: python tools/story_build.py <take-name>")
-    build(C.find_raw(sys.argv[1]).stem)
+    ap = argparse.ArgumentParser(description="Build a /reel-story composition")
+    ap.add_argument("take")
+    ap.add_argument("--guides", action="store_true", help="overlay Instagram UI zones (previews only)")
+    ap.add_argument("--no-moodboard", action="store_true", help="skip the style-brief gate (testing only)")
+    args = ap.parse_args()
+    build(C.find_raw(args.take).stem, guides=args.guides, no_moodboard=args.no_moodboard)

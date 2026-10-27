@@ -40,7 +40,13 @@
   },
   "split": {
     "panel_height": 864,
-    "safe": [64, 160, 64, 32]
+    "safe": [64, 200, 64, 32]
+  },
+  "moodboard_dir": "moodboard",
+  "instagram_safe_zones": {
+    "header": [0, 0, 1080, 200],
+    "actions": [920, 1000, 1080, 1520],
+    "footer": [0, 1520, 1080, 1920]
   },
   "render": {
     "workers": 3,

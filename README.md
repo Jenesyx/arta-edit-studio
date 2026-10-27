@@ -22,14 +22,17 @@ Built by **Arta Bidkhori** · Instagram [@artabidkhori](https://www.instagram.co
 6. [Folder layout](#folder-layout)
 7. [Configuration](#configuration-reelconfigjson)
 8. [Preparing your media](#preparing-your-media)
-9. [Using the commands](#using-the-commands)
-10. [How to describe your video (prompting guide)](#how-to-describe-your-video-prompting-guide)
-11. [Giving feedback after the first version](#giving-feedback-after-the-first-version)
-12. [What you get](#what-you-get)
-13. [Customising](#customising)
-14. [Troubleshooting](#troubleshooting)
-15. [Staying up to date](#staying-up-to-date)
-16. [Credits and license](#credits-and-license)
+9. [Your mood board (required)](#your-mood-board-required)
+10. [Instagram safe zones](#instagram-safe-zones)
+11. [Smooth motion](#smooth-motion)
+12. [Using the commands](#using-the-commands)
+13. [How to describe your video (prompting guide)](#how-to-describe-your-video-prompting-guide)
+14. [Giving feedback after the first version](#giving-feedback-after-the-first-version)
+15. [What you get](#what-you-get)
+16. [Customising](#customising)
+17. [Troubleshooting](#troubleshooting)
+18. [Staying up to date](#staying-up-to-date)
+19. [Credits and license](#credits-and-license)
 
 ---
 
@@ -70,7 +73,11 @@ What it deliberately does **not** do:
 | **Energy** | High — something changes every 2–4 s | Calm and clear — one idea per panel scene |
 | **Ending** | Big comment keyword + follow card + logo lockup | Big comment keyword + follow card |
 
-Both: no subtitles, no sound effects, your own audio untouched, Instagram-safe zones respected.
+Both: no subtitles, no sound effects, your own audio untouched. And in both:
+
+- **The look comes from your mood board**, not from a generic AI template.
+- **Instagram's buttons, header and caption area stay clear** — checked automatically before rendering.
+- **Every move is eased, curved and motion-blurred** — no robotic sliding text.
 
 Signature tricks of `/reel-story` (all included as copyable examples):
 
@@ -89,13 +96,17 @@ raw/your-video.mp4
    ├─ 1. Transcribe ........ Whisper large-v3 → every word with its exact time
    ├─ 2. Face tracking ..... OpenCV → where your face is (for zooms / framing)
    ├─ 3. B-roll catalogue .. contact sheets of your clips + a notes file Claude keeps
-   ├─ 4. Beat plan ......... Claude pins a visual idea to a spoken word every few seconds
-   ├─ 5. Assets ............ B-roll trimmed (HDR → SDR, mirrored selfies fixed),
+   ├─ 4. Mood board ........ your references → colours, pace, style → a style brief
+   │                         that YOU approve before anything is designed
+   ├─ 5. Beat plan ......... Claude pins a visual idea to a spoken word every few seconds
+   ├─ 6. Assets ............ B-roll trimmed (HDR → SDR, mirrored selfies fixed),
    │                         mascot background removed, AI cut-out of you (matte)
-   ├─ 6. Composition ....... Claude writes the animation as HTML + GSAP (HyperFrames)
-   ├─ 7. Checks ............ lint, snapshots, then a 12-second REAL test render
-   ├─ 8. Render ............ HyperFrames renders 1080×1920 @ 30 fps
-   └─ 9. Package + QA ...... your original audio put back, loudness check,
+   ├─ 7. Composition ....... Claude writes the animation as HTML + GSAP (HyperFrames)
+   │                         with the motion library (curves, motion blur, keyframes)
+   ├─ 8. Checks ............ lint, Instagram safe-zone scan, motion lint, snapshots
+   │                         with zone guides, then a 12-second REAL test render
+   ├─ 9. Render ............ HyperFrames renders 1080×1920 @ 30 fps
+   └─ 10. Package + QA ..... your original audio put back, loudness check,
                              contact sheet of the result → final/your-video/
 ```
 
@@ -176,7 +187,8 @@ arta-edit-studio/
 │  ├─ reel-setup/        /reel-setup  — install + personal config
 │  ├─ reel-story/        /reel-story  — full-frame motion edit (+ techniques catalogue)
 │  └─ reel-split/        /reel-split  — 45 % panel edit
-├─ tools/                the Python tools the skills run
+├─ tools/                the Python tools the skills run (+ motion.js)
+├─ docs/                 mood board guide, style-brief template, motion, safe zones
 ├─ examples/
 │  ├─ story/             a real 82 s /reel-story edit (25 scenes) to learn from
 │  └─ split/             a real 100 s /reel-split edit (18 scenes) to learn from
@@ -186,6 +198,7 @@ arta-edit-studio/
 │  ├─ mascot/            ← optional character images
 │  └─ brand/             ← optional logo.png
 ├─ font/                 ← font files
+├─ moodboard/            ← your references: default/ and one folder per video
 ├─ work/                 working files per video (safe to delete)
 ├─ final/                ← finished videos
 ├─ CLAUDE.md             tells Claude how to use this repo
@@ -193,7 +206,7 @@ arta-edit-studio/
 └─ reel.config.json      your personal settings (not uploaded to git)
 ```
 
-Your media folders and `reel.config.json` are in `.gitignore` — your videos never end up on GitHub.
+Your media folders, mood boards and `reel.config.json` are in `.gitignore` — your videos never end up on GitHub.
 
 ---
 
@@ -215,7 +228,9 @@ Copy `reel.config.example.json` to `reel.config.json`. Any key you leave out fal
 | `split_palette.*` | `/reel-split` panel colours: `cream`, `ink`, `accent`, `accent_deep` (text on cream), `line` | hex colours |
 | `fonts.fa` / `fonts.en` / `fonts.display` | font files for Farsi text, Latin text, giant display words | `"font/Vazirmatn-Medium.ttf"` |
 | `split.panel_height` | panel height in px (864 = 45 %, 960 = 50 %) | `864` |
-| `split.safe` | panel padding `[left, top, right, bottom]` — top keeps text clear of Instagram's header | `[64, 160, 64, 32]` |
+| `split.safe` | panel padding `[left, top, right, bottom]` — top keeps text clear of Instagram's header | `[64, 200, 64, 32]` |
+| `moodboard_dir` | where mood boards live | `"moodboard"` |
+| `instagram_safe_zones` | boxes `[x0, y0, x1, y1]` kept free of content: `header`, `actions`, `footer` | see [Instagram safe zones](#instagram-safe-zones) |
 | `render.workers` / `render.node_heap_mb` | render parallelism / memory for the renderer | `3` / `12288` |
 | `loudness.lufs` / `loudness.true_peak` | targets the final check reports against | `-14` / `-1.5` |
 
@@ -252,6 +267,85 @@ keep your face roughly in the middle of the frame.
 
 ---
 
+## Your mood board (required)
+
+Before Claude designs anything it looks at **your** references. This is what keeps your
+Reels looking like *you* instead of generic "AI slop". No mood board → Claude stops and
+asks you to make one.
+
+```
+moodboard/
+├─ default/          ← your general style, used for every video
+└─ <video-name>/     ← optional, just for one video (wins over default)
+```
+
+Put in it (10 minutes is enough):
+
+| What | How many |
+| --- | --- |
+| Screenshots of Reels / designs you love (pause the Reel and screenshot) | 5–15 |
+| Short screen recordings of motion / transitions you like | 1–3, ≤ 30 s each |
+| Your brand: logo, colours, a post you're proud of | any |
+| `notes.md`: 3–5 mood words, what you like, what you **hate** | 1 |
+
+`notes.md` example:
+
+```markdown
+Mood words: bold, playful, clean
+Like: giant yellow words, quick zooms on my face, hand-made looking stickers
+Hate: neon glow, too many emojis, robotic sliding text, purple-blue gradients
+```
+
+What happens: `tools/moodboard.py` makes contact sheets of your board, pulls out the
+dominant colours and measures the **pace** of your reference videos (cuts per minute).
+Claude then writes a **style brief** — mood, palette, typography, motion, graphic language,
+density, do's and don'ts, each tied to one of your references — and shows it to you.
+**You approve it before anything is built.** Full guide: [docs/moodboard.md](docs/moodboard.md).
+
+---
+
+## Instagram safe zones
+
+Instagram draws its own interface over every Reel. Nothing you need to read or see is
+allowed under it:
+
+| Zone | Area (1080 × 1920) | Instagram puts there |
+| --- | --- | --- |
+| `header` | top 200 px | status bar, "Reels", camera |
+| `actions` | right 160 px, y 1000–1520 | like, comment, share, send, more |
+| `footer` | bottom 400 px | @name, Follow, caption, audio |
+
+Full-screen pictures (you, B-roll, backgrounds) may run under the UI. Text, stickers,
+cards, buttons, logos and mascots may not.
+
+- **Guides:** previews and test renders come with an overlay of the zones, a 120 px grid,
+  thirds and centre lines (`quick_sheet_guides.jpg`, `qa/sheet_guides.jpg`).
+- **Automatic check:** `tools/safezone.py check <video>` scans the whole timeline in a
+  headless browser every 0.2 s. **The render is blocked** while anything sits in a zone.
+- Phone layouts differ slightly; adjust the boxes in `reel.config.json` if yours does.
+
+Details: [docs/safe-zones.md](docs/safe-zones.md).
+
+---
+
+## Smooth motion
+
+Every composition loads a motion library (`tools/motion.js`, built on GSAP's MotionPath
+and CustomEase):
+
+- **House easing curves:** things arrive fast and land softly, and leave by accelerating
+  away. Nothing moves at constant speed.
+- **Curved paths:** `arcIn` / `arcOut` move stickers and cards on an arc, not a straight line.
+- **Directional motion blur:** fast moves and whips between clips blur along the
+  direction of travel. Elements are pin-sharp when they stop.
+- **Overshoot and settle** for giant words; **keyframes** for multi-step moves;
+  **smooth camera** punch-ins.
+- **Motion lint:** `tools/motion_check.py` flags linear, jerky or teleporting moves before rendering.
+
+Rules and examples: [docs/motion.md](docs/motion.md).
+
+---
+
 ## Using the commands
 
 | Command | When |
@@ -266,10 +360,11 @@ matter (`StoodiInviteRaw` finds `stoodi-inviteraw.mp4`).
 After you send the command, Claude:
 
 1. asks once for anything missing (edited already? comment keyword? names?),
-2. transcribes, looks at your video and B-roll, writes a beat plan,
-3. builds, checks and test-renders,
-4. renders the full video (≈ 10–15 min for 80 s) and checks the frames,
-5. tells you where the file is and what's in it.
+2. transcribes, looks at your video, B-roll and **mood board**,
+3. shows you the **style brief** and waits for your OK,
+4. writes a beat plan, builds, runs the safe-zone and motion checks, test-renders,
+5. renders the full video (≈ 10–15 min for 80 s) and checks the frames,
+6. tells you where the file is and what's in it.
 
 If you just say "edit my video" without a command, Claude asks which style you want.
 
@@ -292,6 +387,7 @@ Names: <brand, people, tools Whisper may mishear>. <Any wishes>.
 | Include | Why it matters |
 | --- | --- |
 | **Topic in 1–2 sentences** | Claude plans visuals for the *message*, not just the words |
+| **Your mood board** (in `moodboard/`) | the look, colours and pace come from it — mention anything special about it |
 | **Edited already?** | if yes, nothing is cut or re-coloured; if no, Claude asks before touching it |
 | **Comment keyword** | it appears huge at the end (`JOIN`, `5`, `موشن` …) |
 | **Names and jargon** | Whisper spells them right (`Stoodi`, `HyperFrames`, `n8n`, `Tutorium`) |
@@ -391,12 +487,14 @@ above −1.5 dBTP the check says so — your audio is never changed unless you a
 | Problem | Cause → fix |
 | --- | --- |
 | Final video looks dark / washed, stickers never disappear | an HDR (HLG) clip got in untouched → `finish.py` now stops with "HDR auto-promotion"; re-run `story_assets.py <video> broll` (tone-maps HDR) |
-| Render stops silently halfway | renderer ran out of memory → keep `render.node_heap_mb` at 12288, close games / Premiere, or lower `render.workers` |
+| Render stops silently halfway | renderer ran out of memory. `finish.py` retries with 1 worker by itself; if it still dies, close Premiere / games / browser tabs, or run with `PRODUCER_LOW_MEMORY_MODE=1` |
+| "no style brief" / "NO MOOD BOARD" | fill `moodboard/default/` or `moodboard/<video>/` (see [Your mood board](#your-mood-board-required)) and let Claude write the brief |
+| "content inside Instagram's UI zones" | the safe-zone check found text/stickers under Instagram's UI; Claude moves them (or you accept it with `--allow-safezone`) |
 | Whisper crashes (exit 139) or "CUDA out of memory" | another program holds the GPU or RAM (games, Premiere) → close it and retry |
 | `font 'fa' not found` | put the font file in `font/` and check `fonts.*` in the config |
 | Video renders completely black | `dir="rtl"` on `<html>` — Claude should never do this; tell it |
 | Snapshot looked fine, render is wrong | expected sometimes — that's why there is a 12-second real test render; send Claude the timestamp |
-| Text hidden under Instagram's top bar / buttons | tell Claude the timestamp; safe zones are in the skills |
+| Text hidden under Instagram's top bar / buttons | shouldn't happen any more (automatic check); if your phone's layout differs, adjust `instagram_safe_zones` |
 | Text on my B-roll reads backwards | it was a mirrored selfie → Claude adds it to `MIRRORED` |
 | `zscale` filter not found | your FFmpeg build lacks libzimg → install the "full" build |
 

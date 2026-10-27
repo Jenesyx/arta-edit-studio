@@ -6,12 +6,17 @@ assets/brand/*
 font/*
 work/*
 final/*
+moodboard/*
 !raw/.gitkeep
 !assets/broll/.gitkeep
 !assets/mascot/.gitkeep
 !assets/brand/.gitkeep
 !font/.gitkeep
 !work/.gitkeep
+!moodboard/README.md
+!moodboard/default/
+moodboard/default/*
+!moodboard/default/.gitkeep
 !final/.gitkeep
 reel.config.json
 

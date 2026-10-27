@@ -21,5 +21,12 @@ burned-in captions should use the separate `persian-reel` skill (see README).
 - Python: the repo venv, `-X utf8` (Farsi on stdout). Windows `.venv/Scripts/python.exe`, macOS/Linux `.venv/bin/python`.
 - Render and package only through `tools/finish.py <take>` (`--seconds 12` for a quick real render first). It carries the heap / HDR / audio fixes; a bare `npx hyperframes render` does not.
 - Look at real rendered frames before calling anything done — snapshots have looked right while the render was wrong.
-- `raw/` and `assets/` are the creator's files: read, never modify. Work goes in `work/<take>/`, deliverables in `final/<take>/`.
+- **Mood board first.** No edit is designed before `tools/moodboard.py <take>` has run on the
+  creator's mood board and they approved `work/<take>/style.md` (docs/moodboard.md,
+  docs/style-brief.md). No board → ask them to make one; don't invent a style.
+- **Instagram safe zones.** Nothing to read or see inside the UI zones in
+  `instagram_safe_zones` (docs/safe-zones.md); `tools/safezone.py check` must pass.
+- **Smooth motion.** Use the house eases and helpers in `tools/motion.js` (docs/motion.md);
+  no linear or instant moves.
+- `raw/`, `assets/` and `moodboard/` are the creator's files: read, never modify. Work goes in `work/<take>/`, deliverables in `final/<take>/`.
 - When an edit teaches something new (a bug, a preference), add it to the matching skill in `.claude/skills/` so the next take starts from it.

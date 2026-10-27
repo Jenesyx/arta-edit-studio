@@ -29,6 +29,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import config as C  # noqa: E402
+import studio  # noqa: E402
 
 ICON_ROOT = C.ROOT / "node_modules" / "lucide-static" / "icons"
 
@@ -736,11 +737,12 @@ body{font-family:"BrandFa","LatinUI",sans-serif;color:__INK__;}
 
 JS_HELPERS = """
 const fa = n => String(n).replace(/[0-9]/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
+// EASE / DUR / arcIn / whip / mblur / settle / kf come from assets/motion.js
 function inUp(sel, t, o) {
-  tl.from(sel, Object.assign({y: 40, autoAlpha: 0, duration: 0.36, ease: "power3.out"}, o || {}), t);
+  tl.from(sel, Object.assign({y: 50, autoAlpha: 0, duration: DUR.enter, ease: EASE.enter}, o || {}), t);
 }
 function pop(sel, t, o) {
-  tl.from(sel, Object.assign({scale: 0.6, autoAlpha: 0, duration: 0.3, ease: "back.out(1.5)"}, o || {}), t);
+  tl.from(sel, Object.assign({scale: 0.6, autoAlpha: 0, duration: DUR.pop, ease: EASE.pop}, o || {}), t);
 }
 function draw(sel, t, d) {
   tl.to(sel, {strokeDashoffset: 0, duration: d || 0.42, stagger: 0.04, ease: "power1.inOut"}, t);
@@ -759,16 +761,17 @@ function talk(sel, t, reps) {
 """
 
 
-def build(name: str) -> Path:
+def build(name: str, guides: bool = False, no_moodboard: bool = False) -> Path:
+    studio.require_style(name, skip=no_moodboard)
     wd = C.work_dir_for(name)
     plan = json.loads((wd / "showcase.json").read_text(encoding="utf-8"))
     sc = wd / "sc"
     pub = sc / "public"
     (pub / "assets" / "fonts").mkdir(parents=True, exist_ok=True)
 
-    gsap = C.gsap_js()
+    scripts = studio.runtime(pub / "assets")
+    overlay = studio.guides_html(pub / "assets") if guides else ""
     latin = C.font("en")
-    shutil.copyfile(gsap, pub / "assets" / "gsap.min.js")
     fafont = C.brand_font()
     shutil.copyfile(fafont, pub / "assets" / "fonts" / fafont.name)
     shutil.copyfile(latin, pub / "assets" / "fonts" / latin.name)
@@ -822,7 +825,7 @@ def build(name: str) -> Path:
         js += anims
         if i < len(scenes):
             fade = end - 0.25
-            js.append(f'tl.to("#s{i}-inner",{{autoAlpha:0,duration:0.22,ease:"power2.in"}},{T(fade)});')
+            js.append(f'tl.to("#s{i}-inner",{{autoAlpha:0,duration:0.22,ease:EASE.exit}},{T(fade)});')
             js.append(f'tl.set("#s{i}-inner",{{autoAlpha:0}},{T(fade + 0.22)});')
     body.append(f'<div id="panel" class="clip" data-start="0" data-duration="{dur}" '
                 f'data-track-index="1">{"".join(inner)}</div>')
@@ -836,12 +839,12 @@ def build(name: str) -> Path:
     html = f"""<!doctype html>
 <html lang="fa" data-resolution="portrait">
 <head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
-<script src="assets/gsap.min.js"></script>
+{scripts}
 <style>{css}</style></head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{dur}"
      data-width="1080" data-height="1920">
-{chr(10).join(body)}
+{chr(10).join(body)}{overlay}
 </div>
 <script>
 window.__timelines = window.__timelines || {{}};
@@ -856,7 +859,7 @@ window.__timelines["main"] = tl;
     out = pub / "index.html"
     out.write_text(html, encoding="utf-8")
     holds = sorted(min(s["end"], dur) - s["start"] for s in scenes)
-    print(f"[showcase] {out}")
+    print(f"[showcase] {out}" + ("  + Instagram guides (preview only)" if guides else ""))
     print(f"[showcase] {len(scenes)} scenes over {dur:.2f}s, median hold "
           f"{holds[len(holds) // 2]:.2f}s, longest {holds[-1]:.2f}s")
     return out
@@ -865,8 +868,10 @@ window.__timelines["main"] = tl;
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build a permanent-panel showcase Reel")
     ap.add_argument("video")
+    ap.add_argument("--guides", action="store_true", help="overlay Instagram UI zones (previews only)")
+    ap.add_argument("--no-moodboard", action="store_true", help="skip the style-brief gate (testing only)")
     args = ap.parse_args(argv)
-    build(C.find_raw(args.video).stem)
+    build(C.find_raw(args.video).stem, guides=args.guides, no_moodboard=args.no_moodboard)
     return 0
 
 

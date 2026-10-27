@@ -53,12 +53,20 @@ in one message (skip what the arguments already answered):
 
 Write the answers into `reel.config.json` (keep every key the example has).
 
-## 5. Smoke test
+## 5. Mood board
+
+Explain (in the user's language) that every edit starts from **their** mood board, so the
+result looks like them and not like generic AI: `moodboard/default/` for their general
+style, `moodboard/<video-name>/` per video. 5–15 screenshots of Reels they love, 1–3
+short screen recordings of motion they like, their brand, and a `notes.md` with mood
+words + likes + dislikes (docs/moodboard.md). Offer to look at it with them once it's filled.
+
+## 6. Smoke test
 
 - `.venv/Scripts/python -X utf8 -c "import sys; sys.path.insert(0,'tools'); import config, story_build, showcase_build; print('tools ok')"`
 - If a video is already in `raw/`: `$PY tools/face_track.py <take>` should print a face position.
 
-## 6. Hand-off
+## 7. Hand-off
 
 Print a short "how to use" with one example each, in the user's language:
 `/reel-story <take> <topic, comment keyword, names>` and `/reel-split <take> …`.
