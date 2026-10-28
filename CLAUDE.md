@@ -14,7 +14,7 @@ Settings (creator handle, language, brand, palette, fonts) live in `reel.config.
 | Asks to edit a take but names neither | Ask which of the two — one question, two options. Don't guess |
 
 Both styles: no subtitles, no SFX, the take's own audio untouched. Someone who wants
-burned-in captions should use the separate `persian-reel` skill (see README).
+burned-in captions should use the separate `persian-reel` skill.
 
 ## Ground rules
 

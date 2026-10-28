@@ -57,7 +57,6 @@ understands (English, Arabic, German, Turkish, …).
 What it deliberately does **not** do:
 
 - **No subtitles.** Both styles tell the story with graphics, not captions.
-  Want burned-in Farsi captions? Use [persian-reel](https://github.com/aradazr/persian-reel) by Arad Azarpanah.
 - **No cutting, colour grading or music.** It assumes you already edited your take
   (cuts, colour, music) in CapCut / Premiere / your phone. Your audio stays exactly as you mixed it.
 
@@ -524,5 +523,4 @@ Standing on the shoulders of:
 - [GSAP](https://gsap.com) (free "no charge" license) — animation
 - [Lucide](https://lucide.dev) (ISC) — icons
 - [OpenCV](https://opencv.org) (Apache-2.0) and [FFmpeg](https://ffmpeg.org) (LGPL/GPL)
-- [persian-reel](https://github.com/aradazr/persian-reel) by Arad Azarpanah (MIT) — the captioned Farsi Reel skill that inspired this project
 - Fonts: [Vazirmatn](https://github.com/rastikerdar/vazirmatn) by Saber Rastikerdar, [Poppins](https://fonts.google.com/specimen/Poppins) by Indian Type Foundry (OFL)

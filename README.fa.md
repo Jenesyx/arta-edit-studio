@@ -56,7 +56,7 @@ Arta Edit Studio مجموعه‌ای از **اسکیل‌ها (دستورهای 
 
 کارهایی که **عمداً انجام نمی‌ده**:
 
-- **زیرنویس نمی‌ذاره.** هر دو سبک داستان رو با گرافیک تعریف می‌کنن، نه با زیرنویس. اگه زیرنویس فارسی سوخته روی ویدیو می‌خوای، از [persian-reel](https://github.com/aradazr/persian-reel) ساخته‌ی آراد آذرپناه استفاده کن.
+- **زیرنویس نمی‌ذاره.** هر دو سبک داستان رو با گرافیک تعریف می‌کنن، نه با زیرنویس.
 - **کات، اصلاح رنگ و موزیک انجام نمی‌ده.** فرضش اینه که خودت ویدیوت رو (توی CapCut، Premiere یا گوشی) کات زدی، رنگش رو درست کردی و موزیک گذاشتی. صدای ویدیوت دقیقاً همون‌طور که میکس کردی می‌مونه.
 
 ---
@@ -565,7 +565,6 @@ final/<video>/
 - [GSAP](https://gsap.com) (لایسنس رایگان) — انیمیشن
 - [Lucide](https://lucide.dev) (ISC) — آیکون‌ها
 - [OpenCV](https://opencv.org) (Apache-2.0) و [FFmpeg](https://ffmpeg.org) (LGPL/GPL)
-- [persian-reel](https://github.com/aradazr/persian-reel) ساخته‌ی آراد آذرپناه (MIT) — اسکیل ریلز فارسی با زیرنویس که الهام‌بخش این پروژه بود
 - فونت‌ها: [وزیرمتن](https://github.com/rastikerdar/vazirmatn) ساخته‌ی صابر راستی‌کردار، [Poppins](https://fonts.google.com/specimen/Poppins) ساخته‌ی Indian Type Foundry (OFL)
 
 </div>
